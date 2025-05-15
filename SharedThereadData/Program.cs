@@ -1,8 +1,6 @@
-﻿var locker = new Lock();
-
-void GetIncorrectValue()
+﻿void GetIncorrectValue()
 {
-    int theValue = 0;
+    var theValue = 0;
     var threads = new Thread[100];
 
     for (int i = 0; i < threads.Length; ++i)
@@ -11,10 +9,7 @@ void GetIncorrectValue()
         {
             for (int j = 0; j < 100_000; ++j)
             {
-                lock (locker)
-                {
-                  ++theValue;
-                }
+                Interlocked.Increment(ref theValue);
             }           
         });
         threads[i].Start();
