@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaitingThreads", "WaitingTh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadPoolInation", "ThreadPoolInation\ThreadPoolInation.csproj", "{DE7B3D83-F94B-4BF4-819B-F163535511F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedThereadData", "SharedThereadData\SharedThereadData.csproj", "{91F4FD9A-E01D-4108-89AD-EA77453BF074}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{DE7B3D83-F94B-4BF4-819B-F163535511F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE7B3D83-F94B-4BF4-819B-F163535511F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE7B3D83-F94B-4BF4-819B-F163535511F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F4FD9A-E01D-4108-89AD-EA77453BF074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F4FD9A-E01D-4108-89AD-EA77453BF074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F4FD9A-E01D-4108-89AD-EA77453BF074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F4FD9A-E01D-4108-89AD-EA77453BF074}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{0C5C5756-6F19-4DF7-B822-BBB2B87D7415} = {4F820D64-C58F-4A23-A344-0E2045A17E11}
 		{A23F445F-3F98-4F68-80C2-BE61AA31F8D6} = {4F820D64-C58F-4A23-A344-0E2045A17E11}
 		{DE7B3D83-F94B-4BF4-819B-F163535511F7} = {4F820D64-C58F-4A23-A344-0E2045A17E11}
+		{91F4FD9A-E01D-4108-89AD-EA77453BF074} = {4F820D64-C58F-4A23-A344-0E2045A17E11}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D83415D-24FF-4C7B-8AE6-096932A8D156}
