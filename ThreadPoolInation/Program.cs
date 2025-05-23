@@ -10,7 +10,7 @@ foreach(var thread in threads)
 
 Thread.Sleep(10_000);
 Console.WriteLine("Finish");
-foreach (var item in example._cache)
+foreach (var item in example.Cache)
 {
     Console.WriteLine($"{item.Key}:{item.Value.Length}");
 }
