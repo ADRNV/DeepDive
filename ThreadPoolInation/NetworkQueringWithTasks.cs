@@ -41,9 +41,14 @@ namespace ThreadPoolInation
         {
             var thread = new Thread(async () =>
             {
-                var result = await GetJoke(new Random().Next(1, 5).ToString());
-              
-                Out(result);
+                var queries = new List<string>() { "R7UfaahVfFd", "PZDAXL6pOCd", "MRZ0LJtHQCd", "usrcaMuszd", "R7UfaahVfFd", "usrcaMuszd" };
+
+                foreach (var query in queries)
+                {
+                    var result = await GetJoke(query);
+
+                    Out(result);
+                }
 
             });
             thread.Name = "Network fetch";
