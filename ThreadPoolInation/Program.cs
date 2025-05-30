@@ -1,22 +1,34 @@
 ﻿using ThreadPoolInation;
 
 var example = new NetworkQueringWithTasks();
-var threads = Enumerable.Range(0, 35).Select(i => example.RunFromThread());
+var threads = Enumerable.Range(0, 3).Select(i => example.RunFromThread());
+
+var locker = new Lock();
 
 foreach(var thread in threads)
 {
     thread.Start();
 }
 
-Thread.Sleep(10_000);
-Console.WriteLine("Finish");
-foreach (var item in example.Cache)
+lock (locker)
 {
-    Console.WriteLine($"{item.Key}:{item.Value.Length}");
+    Console.WriteLine("Finish");
+    foreach (var item in example.Cache)
+    {
+        Console.WriteLine($"{item.Key}:{item.Value}");
+    }
 }
-Console.WriteLine("Hitory");
-foreach (var item in example.History)
+
+lock (locker) 
+{ 
+    Console.WriteLine("Hitory");
+    foreach (var item in example.History)
+    {
+        Console.WriteLine($"{item.Key}:{item.Value?.Length}");
+    }
+}
+
+while (true) 
 {
-    Console.WriteLine($"{item.Key}:{item.Value?.Length}");
-}
+};
 

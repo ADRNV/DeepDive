@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Running;
 using EnumerableInterfaces;
 using StreamsAndAsync;
+using ThreadPoolInation;
 
 
 var example = new StreamsAndAsyncExample();
@@ -11,7 +12,8 @@ var tasks = new List<Task>();
 
 Enumerable.Range(0, 30_000)
     .ToList()
-    .ForEach(async (i) => {
+    .ForEach(async (i) =>
+    {
         var task = example.WriteSampleAsync(StreamsAndAsyncExample.GenerateContent(100), dir + @$"\{i}.txt");
         tasks.Add(task);
     });
@@ -19,8 +21,4 @@ Enumerable.Range(0, 30_000)
 Task.WaitAll(tasks.ToArray());
 
 BenchmarkRunner
-   .Run<StreamsAndAsyncExample>();
-
-
-//new EnumerableFileReading()
-//    .FileAsEnumerable();
+   .Run<NetworkQueringWithTasks>();
