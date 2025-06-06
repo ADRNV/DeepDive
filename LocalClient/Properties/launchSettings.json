@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LocalClient": {
+      "commandName": "Project",
+      "commandLineArgs": "32"
+    }
+  }
+}

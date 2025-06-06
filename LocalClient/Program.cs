@@ -1,54 +1,56 @@
-﻿using System.Net.Sockets;
+﻿using System.Diagnostics;
+using System.Net.Sockets;
 using System.Net;
-using System.Text;
-using System.Diagnostics;
 
+int count = int.Parse(args[0]);
+Console.WriteLine($"Running with {count} connections");
+var tasks = new Task[count];
+int failCount = 0;
+var faileCountLock = new Lock();
 
-var hostName = Dns.GetHostName();
+Stopwatch sw = Stopwatch.StartNew();
 
-IPHostEntry localhost = await Dns.GetHostEntryAsync(hostName);
-
-var adress = new IPEndPoint(localhost.AddressList[0], 11_000);
-
-using var sender = new Socket(adress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-Thread.Sleep(2_000);
-
-await sender.ConnectAsync(adress);
-
-var count = 0;
-
-var st = new Stopwatch();
-
-st.Start();
-
-while (sender.Connected)
+for (int i = 0; i < count; ++i)
 {
-    var message = $"Form client {count}";
-
-    message += "<|EOM|>";
-    
-    Console.WriteLine("Client: "+ message);
-
-    var encoded = Encoding.UTF8.GetBytes(message);
-
-    _ = await sender.SendAsync(encoded, SocketFlags.None);
-
-    var buffer = new byte[1_024];
-    var received = await sender.ReceiveAsync(buffer, SocketFlags.None);
-    var response = Encoding.UTF8.GetString(buffer, 0, received);
-    if (response == "<|RD|>")
-    {
-        Console.WriteLine(
-            $"Socket client received acknowledgment: \"{response}\"");
-       // break;
-    }
-
-    if (count >= 10_000) break;
-    
-    count++;
+    tasks[i] = RunTest(i);
 }
+Task.WaitAll(tasks);
+sw.Stop();
 
-st.Stop();
+ lock(faileCountLock)
+   if (failCount > 0) Console.WriteLine($"{failCount} failures");
 
-Console.WriteLine("Sended from " + st.ElapsedMilliseconds);
+Console.WriteLine($"time: {sw.ElapsedMilliseconds}ms");
+
+Task RunTest(int currentTask) 
+{
+    return Task.Run(async () =>
+    {
+        var rng = new Random(currentTask);
+        await Task.Delay(rng.Next(2 * count));
+        using var clientSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+        try
+        {
+            var hostName = Dns.GetHostName();
+
+            IPHostEntry localhost = Dns.GetHostEntryAsync(hostName).Result;
+
+            var adress = new IPEndPoint(localhost.AddressList[0], 7777);
+
+            await clientSocket.ConnectAsync(adress);
+
+            var buffer = new byte[1024 * 1024];
+            while (clientSocket.Connected)
+            {
+                int read = await clientSocket.ReceiveAsync(
+                      buffer, SocketFlags.None);
+                if (read == 0) break;
+            }
+        }
+        catch
+        {
+            lock (faileCountLock)
+                ++failCount;
+        }
+    });
+}
