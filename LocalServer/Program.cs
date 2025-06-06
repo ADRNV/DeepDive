@@ -6,12 +6,12 @@ var hostName = Dns.GetHostName();
 
 IPHostEntry localhost = await Dns.GetHostEntryAsync(hostName);
 
-var adress = new IPEndPoint(localhost.AddressList[0], 11_000);
+var adress = new IPEndPoint(localhost.AddressList[0], 7777);
 
-using var listener = new Socket(adress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+using var listener = new Socket(SocketType.Stream, ProtocolType.Tcp);
 
 listener.Bind(adress);
-listener.Listen(10);
+listener.Listen(50);
 
 Console.WriteLine("Server start");
 
@@ -21,24 +21,31 @@ while (true)
 {
     var buffer = new byte[1024];
 
-    var recived = await handler.ReceiveAsync(buffer, SocketFlags.None);
+    var connection = listener.Accept();
 
-    var response = Encoding.UTF8.GetString(buffer, 0, recived);
-
-    var eom = "<|EOM|>";
-    if (response.IndexOf(eom) > -1 /* is end of message */)
+    var thread = new Thread(() =>
     {
-        Console.WriteLine(
-            $"Socket server received message: \"{response.Replace(eom, "")}\"");
+        using var file = new FileStream(@"data.txt",
+          FileMode.Open, FileAccess.Read, FileShare.Read);
+        var buffer = new byte[1024 * 1024];
 
-        var ackMessage = "<|RD|>";
+        while (true)
+        {
+            int read = file.Read(buffer, 0, buffer.Length);
 
-        var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
-        await handler.SendAsync(echoBytes, 0);
-        Console.WriteLine(
-            $"Socket server sent acknowledgment: \"{ackMessage}\"");
+            if (read != 0)
+            {
+                connection.Send(new ArraySegment<byte>(buffer, 0, read), SocketFlags.None);
+            }
+            else
+            {
+                Console.WriteLine("Server stopped");
+                connection.Shutdown(SocketShutdown.Both);
+                connection.Dispose();
+                return;
+            }
+        }
+    });
 
-        //break;
-    }
-
+    thread.Start();
 }
