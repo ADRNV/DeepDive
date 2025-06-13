@@ -15,15 +15,13 @@ listener.Listen(50);
 
 Console.WriteLine("Server start");
 
-var handler = await listener.AcceptAsync();
-
 while (true)
 {
+    var connection = await listener.AcceptAsync();
+
     var buffer = new byte[1024];
 
-    var connection = listener.Accept();
-
-    var thread = new Thread(() =>
+    var thread = Task.Run(async () =>
     {
         using var file = new FileStream(@"data.txt",
           FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -31,11 +29,11 @@ while (true)
 
         while (true)
         {
-            int read = file.Read(buffer, 0, buffer.Length);
+            int read = await file.ReadAsync(buffer, 0, buffer.Length);
 
             if (read != 0)
             {
-                connection.Send(new ArraySegment<byte>(buffer, 0, read), SocketFlags.None);
+                await connection.SendAsync(new ArraySegment<byte>(buffer, 0, read), SocketFlags.None);
                 Console.WriteLine("Server send");
             }
             else
@@ -47,6 +45,4 @@ while (true)
             }
         }
     });
-
-    thread.Start();
 }
