@@ -36,12 +36,13 @@ while (true)
             if (read != 0)
             {
                 connection.Send(new ArraySegment<byte>(buffer, 0, read), SocketFlags.None);
+                Console.WriteLine("Server send");
             }
             else
             {
-                Console.WriteLine("Server stopped");
                 connection.Shutdown(SocketShutdown.Both);
                 connection.Dispose();
+                Console.WriteLine("Connection closed");
                 return;
             }
         }
