@@ -2,6 +2,21 @@
 using System.Net.Sockets;
 using System.Net;
 
+var hostName = Dns.GetHostName();
+
+#region Wait server start
+IPHostEntry localhost = await Dns.GetHostEntryAsync(hostName);
+
+var adress = new IPEndPoint(localhost.AddressList[0], 7777);
+
+using var clientSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+
+while (!clientSocket.Connected)
+{
+    clientSocket.Connect(adress);
+}
+#endregion
+
 int count = int.Parse(args[0]);
 Console.WriteLine($"Running with {count} connections");
 var tasks = new Task[count];
