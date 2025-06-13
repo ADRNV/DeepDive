@@ -12,7 +12,7 @@ Stopwatch sw = Stopwatch.StartNew();
 
 for (int i = 0; i < count; ++i)
 {
-    tasks[i] = RunTest(i);
+    tasks[i] = RunTest(i);//Run on background
 }
 Task.WaitAll(tasks);
 sw.Stop();
@@ -33,14 +33,15 @@ Task RunTest(int currentTask)
         {
             var hostName = Dns.GetHostName();
 
-            IPHostEntry localhost = Dns.GetHostEntryAsync(hostName).Result;
+            IPHostEntry localhost = await Dns.GetHostEntryAsync(hostName);
 
             var adress = new IPEndPoint(localhost.AddressList[0], 7777);
 
             await clientSocket.ConnectAsync(adress);
 
             var buffer = new byte[1024 * 1024];
-            while (clientSocket.Connected)
+
+            while (clientSocket.Connected && clientSocket.Available != 0)
             {
                 int read = await clientSocket.ReceiveAsync(
                       buffer, SocketFlags.None);
