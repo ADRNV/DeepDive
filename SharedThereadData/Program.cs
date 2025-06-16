@@ -1,24 +1,48 @@
-﻿void GetIncorrectValue()
-{
-    var theValue = 0;
-    var threads = new Thread[100];
+﻿using System.Diagnostics;
 
-    for (int i = 0; i < threads.Length; ++i)
+int inc = -1_000;
+Lock incLock = new Lock();
+
+int dec = 1_000;
+Lock decLock = new Lock();
+
+void Inc()
+{
+    while (inc != 1_000)
     {
-        threads[i] = new Thread(() =>
+        lock (decLock)
         {
-            for (int j = 0; j < 100_000; ++j)
+            lock (incLock)
             {
-                Interlocked.Increment(ref theValue);
-            }           
-        });
-        threads[i].Start();
-    }
-    foreach (var current in threads)
-    {
-        current.Join();
-    }
-    Console.WriteLine(theValue);
+                inc++;
+            }
+        }
+    }   
 }
 
-GetIncorrectValue();
+void Dec()
+{
+    while (dec != 0) 
+    {
+        lock(incLock){
+
+            lock (decLock)
+            {
+                dec--;
+            }
+        }
+    }
+}
+
+var incThread = new Thread(Inc);
+var decThread = new Thread(Dec);
+
+incThread.Start();
+decThread.Start();
+
+while (true)
+{
+    Console.WriteLine($"Dec {dec}\nInc {inc}");
+    Console.Clear();
+}
+
