@@ -1,48 +1,52 @@
-﻿using System.Diagnostics;
+﻿var _leftOperand = 40;
+var _leftOperandLock = new Lock();
 
-int inc = -1_000;
-Lock incLock = new Lock();
+var _rightOperand = 2;
+var _rightOperandLock = new Lock();
 
-int dec = 1_000;
-Lock decLock = new Lock();
+int _result = 0;
+var resultLock = new Lock();
 
-void Inc()
+int Multiply()
 {
-    while (inc != 1_000)
+    lock (_leftOperandLock)
     {
-        lock (decLock)
+        lock (_rightOperandLock)
         {
-            lock (incLock)
-            {
-                inc++;
-            }
+            return _leftOperand * _rightOperand;
         }
-    }   
+    }
 }
-
-void Dec()
+int Add()
 {
-    while (dec != 0) 
+    lock (_rightOperandLock)
     {
-        lock(incLock){
-
-            lock (decLock)
-            {
-                dec--;
-            }
+        lock (_leftOperandLock)
+        {
+            return _leftOperand * _rightOperand;
         }
     }
 }
 
-var incThread = new Thread(Inc);
-var decThread = new Thread(Dec);
+var multiplyThread = new Thread(() => {
+    _result = Multiply();
+});
 
-incThread.Start();
-decThread.Start();
+var addThread = new Thread(() => {
+    _result = Add();
+});
+
+var addThreadSecond = new Thread(() => {
+    _result = Add();
+});
+
+multiplyThread.Start();
+addThread.Start();
+addThreadSecond.Start();
 
 while (true)
 {
-    Console.WriteLine($"Dec {dec}\nInc {inc}");
+    Console.WriteLine($"Result: {_result}");
     Console.Clear();
 }
 
