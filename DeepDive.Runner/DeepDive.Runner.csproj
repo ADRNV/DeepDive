@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EnumerableInterfaces\EnumerableInterfaces.csproj" />
+    <ProjectReference Include="..\LocalClient\LocalClient.csproj" />
     <ProjectReference Include="..\StreamsAndAsync\StreamsAndAsync.csproj" />
     <ProjectReference Include="..\ThreadPoolInation\ThreadPoolInation.csproj" />
 		<PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
