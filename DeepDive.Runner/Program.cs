@@ -1,9 +1,7 @@
 ﻿using BenchmarkDotNet.Running;
-using EnumerableInterfaces;
 
 BenchmarkRunner
-   .Run<EnumerableFileReading>();
-
+   .Run<TPLExamples.BenchmarkRunner>();
 
 //new EnumerableFileReading()
 //    .FileAsEnumerable();
