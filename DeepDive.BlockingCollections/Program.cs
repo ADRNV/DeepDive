@@ -11,7 +11,6 @@ var consume = Task.Run(async () =>
     {
         try
         {
-            await Task.Delay(3_000);
             i = resources.Take();
             Console.WriteLine($"Take {i}");
 
@@ -25,11 +24,11 @@ var consume = Task.Run(async () =>
 });
 
 bool moreItemsToAdd = true;
-Lock locker = new Lock();
-
 
 var cancel = new CancellationTokenSource();
+
 cancel.CancelAfter(TimeSpan.FromSeconds(8));
+
 cancel.Token.Register(() =>
 {
     moreItemsToAdd = false;
@@ -44,8 +43,9 @@ var produce = Task.Run(async () =>
         Console.WriteLine($"Produce {data}");
 
         resources.Add(data);
-    } 
-    // Let consumer know we are done.
+
+        await Task.Delay(3_000);
+    }
     resources.CompleteAdding();
 }, cancel.Token);
 
