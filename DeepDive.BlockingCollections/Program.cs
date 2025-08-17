@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 var resources = new BlockingCollection<int>(10);
 
-var consume = Task.Run(async () =>
+var consume = Task.Run(() =>
 {
     int i = -1;
 
