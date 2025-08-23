@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Async", "Async", "{4F820D64
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncProgrammingIntro", "AsyncProgramming\AsyncProgrammingIntro.csproj", "{99FF72A8-1B25-4754-B11A-1DEF4C483B14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CancelationTokenIntro", "DeepDive.CancelationTokenIntro\CancelationTokenIntro.csproj", "{1B47A1CC-4C2B-4A19-9E06-53E741E2F5A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{99FF72A8-1B25-4754-B11A-1DEF4C483B14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99FF72A8-1B25-4754-B11A-1DEF4C483B14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99FF72A8-1B25-4754-B11A-1DEF4C483B14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B47A1CC-4C2B-4A19-9E06-53E741E2F5A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B47A1CC-4C2B-4A19-9E06-53E741E2F5A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B47A1CC-4C2B-4A19-9E06-53E741E2F5A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B47A1CC-4C2B-4A19-9E06-53E741E2F5A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 		{866248DF-02F3-4192-99B8-020AFD4D6DEB} = {DD477CE6-376D-4088-A9CC-FC78AA6869EB}
 		{FE5EAE56-EE63-473D-A2CE-31D8399832DE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{99FF72A8-1B25-4754-B11A-1DEF4C483B14} = {4F820D64-C58F-4A23-A344-0E2045A17E11}
+		{1B47A1CC-4C2B-4A19-9E06-53E741E2F5A4} = {4F820D64-C58F-4A23-A344-0E2045A17E11}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D83415D-24FF-4C7B-8AE6-096932A8D156}
