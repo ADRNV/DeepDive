@@ -1,76 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
+//Something old API doesnt support work Cancelation token
+//In this case need 'pair' events from old api and cancelation CancelationToken.Register(callback)  
+using var cts = new CancellationTokenSource();
 
-public class Example
-{
-    public static void Main()
+var token = cts.Token;
+
+using var client = new WebClient();
+
+client.DownloadStringCompleted += Client_DownloadStringCompleted;
+
+using var clientDisposeCallback =
+    token.Register(() =>
     {
-        // Define the cancellation token.
-        CancellationTokenSource source = new CancellationTokenSource();
-        CancellationToken token = source.Token;
+        client.CancelAsync();
+        client.Dispose();
+    });
 
-        Random rnd = new Random();
-        Object lockObj = new Object();
 
-        List<Task<int[]>> tasks = new List<Task<int[]>>();
-        TaskFactory factory = new TaskFactory(token);
-        for (int taskCtr = 0; taskCtr <= 10; taskCtr++)
-        {
-            int iteration = taskCtr + 1;
-            tasks.Add(factory.StartNew(() => {
-                int value;
-                int[] values = new int[1000];
-                for (int ctr = 1; ctr <= 1000; ctr++)
-                {
-                    lock (lockObj)
-                    {
-                        value = rnd.Next(0, 100);
-                    }
-                    if (value == 0)
-                    {
-                        source.CancelAsync();
-                        Console.WriteLine("Cancelling at task {0}", iteration);
-                        break;
-                    }
-                    values[ctr - 1] = value;
-                }
-                return values;
-            }, token));
-        }
-        try
-        {
-            Task<double> fTask = factory.ContinueWhenAll(tasks.ToArray(),
-            (results) => {
-                Console.WriteLine("Calculating overall mean...");
-                long sum = 0;
-                int n = 0;
-                foreach (var t in results)
-                {
-                    foreach (var r in t.Result)
-                    {
-                        sum += r;
-                        n++;
-                    }
-                }
-                return sum / (double)n;
-            }, token);
-            Console.WriteLine($"The mean is {fTask.Result}",);
-        }
-        catch (AggregateException ae)
-        {
-            foreach (Exception e in ae.InnerExceptions)
+var content = "";
+
+while (true)
+{
+    try
+    {
+        token.ThrowIfCancellationRequested();
+    }
+    catch (OperationCanceledException oce)
+    {
+        Console.WriteLine(oce.Message);
+    }
+    
+    var key = Console.ReadKey(intercept: true).Key;
+
+    switch (key)
+    {
+        case ConsoleKey.Enter:
+           
+            Console.WriteLine("Start download");
+
+            //On background. For example not pass cancelation token
+            Task.Run(async () =>
             {
-                if (e is TaskCanceledException)
-                    Console.WriteLine($"Unable to compute mean: {((TaskCanceledException)e).Message}");
-                else
-                    Console.WriteLine($"Exception: {e.GetType().Name}");
-            }
-        }
-        finally
-        {
-            source.Dispose();
-        }
+                content = await client.DownloadStringTaskAsync(new Uri("https://openweathermap.org/api/one-call-3#current"));
+            }).ConfigureAwait(true);
+        break;
+        case ConsoleKey.C:
+            await cts.CancelAsync();
+        break;
+    }
+}
+
+void Client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
+{
+    if (e.Cancelled)
+    {
+        Console.WriteLine("Download canceled");
+    }
+    else if (e.Error != null)
+    {
+        Console.WriteLine(e.Result);
+        Console.WriteLine($"Error: {e.Error.Message}");
+    }
+    else
+    {
+        Console.WriteLine("Complete");
+        Console.WriteLine(e.Result[..200]);
     }
 }
