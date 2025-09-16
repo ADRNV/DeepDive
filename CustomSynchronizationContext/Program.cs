@@ -1,5 +1,5 @@
 ﻿
-var customCtx = new SingleThreadSynchronizationContext("customCtx");
+using var customCtx = new SingleThreadSynchronizationContext("customCtx");
 
 //Thread.Sleep(1_000);
 
