@@ -16,7 +16,6 @@ public partial class Form1 : Form
 
     private async void button1_Click(object sender, EventArgs e)
     {
-        await Task.Delay(1_000).ConfigureAwait(false);
         textBox1.Text = await GetTextAsync();
     }
 
