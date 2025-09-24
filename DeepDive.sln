@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Async", "Async", "{4F820D64
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncProgrammingIntro", "AsyncProgramming\AsyncProgrammingIntro.csproj", "{99FF72A8-1B25-4754-B11A-1DEF4C483B14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskExceptions", "TaskExceptions\TaskExceptions.csproj", "{8051EA8C-F509-4C36-A3ED-0D79B5A09F13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{99FF72A8-1B25-4754-B11A-1DEF4C483B14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99FF72A8-1B25-4754-B11A-1DEF4C483B14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99FF72A8-1B25-4754-B11A-1DEF4C483B14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8051EA8C-F509-4C36-A3ED-0D79B5A09F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8051EA8C-F509-4C36-A3ED-0D79B5A09F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8051EA8C-F509-4C36-A3ED-0D79B5A09F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8051EA8C-F509-4C36-A3ED-0D79B5A09F13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
